@@ -47,6 +47,16 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.graphql:spring-graphql-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// Cucumber for BDD testing
+	testImplementation 'io.cucumber:cucumber-java:7.18.0'
+	testImplementation 'io.cucumber:cucumber-spring:7.18.0'
+	testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.18.0'
+
+	// Additional testing utilities
+	testImplementation 'com.h2database:h2'
+	testCompileOnly 'org.projectlombok:lombok:1.18.30'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.30'
 }
 
 tasks.named('test') {
