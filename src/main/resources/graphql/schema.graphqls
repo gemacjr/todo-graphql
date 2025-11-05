@@ -1,0 +1,127 @@
+# User Type
+type User {
+    id: ID!
+    username: String!
+    email: String!
+    firstName: String
+    lastName: String
+    isActive: Boolean!
+    todos: [Todo!]!
+    todoCount: Int!
+    completedTodoCount: Int!
+    pendingTodoCount: Int!
+    createdAt: String!
+    updatedAt: String!
+}
+
+# Todo Type
+type Todo {
+    id: ID!
+    title: String!
+    description: String
+    status: TodoStatus!
+    priority: TodoPriority!
+    dueDate: String
+    completedAt: String
+    user: User!
+    createdAt: String!
+    updatedAt: String!
+    isOverdue: Boolean!
+}
+
+# Enums
+enum TodoStatus {
+    PENDING
+    IN_PROGRESS
+    COMPLETED
+    CANCELLED
+}
+
+enum TodoPriority {
+    LOW
+    MEDIUM
+    HIGH
+    URGENT
+}
+
+# Input Types for Users
+input CreateUserInput {
+    username: String!
+    email: String!
+    firstName: String
+    lastName: String
+}
+
+input UpdateUserInput {
+    username: String
+    email: String
+    firstName: String
+    lastName: String
+    isActive: Boolean
+}
+
+# Input Types for Todos
+input CreateTodoInput {
+    title: String!
+    description: String
+    userId: ID!
+    status: TodoStatus
+    priority: TodoPriority
+    dueDate: String
+}
+
+input UpdateTodoInput {
+    title: String
+    description: String
+    status: TodoStatus
+    priority: TodoPriority
+    dueDate: String
+}
+
+# Queries
+type Query {
+    # User Queries
+    user(id: ID!): User
+    userByEmail(email: String!): User
+    userByUsername(username: String!): User
+    users: [User!]!
+    activeUsers: [User!]!
+    searchUsers(search: String!): [User!]!
+
+    # Todo Queries
+    todo(id: ID!): Todo
+    todos: [Todo!]!
+    todosByUser(userId: ID!): [Todo!]!
+    todosByUserAndStatus(userId: ID!, status: TodoStatus!): [Todo!]!
+    todosByUserOrdered(userId: ID!): [Todo!]!
+    overdueTodos: [Todo!]!
+    overdueTodosByUser(userId: ID!): [Todo!]!
+    searchTodosByUser(userId: ID!, search: String!): [Todo!]!
+
+    # Statistics
+    todoStats(userId: ID!): TodoStats!
+}
+
+# Mutations
+type Mutation {
+    # User Mutations
+    createUser(input: CreateUserInput!): User!
+    updateUser(id: ID!, input: UpdateUserInput!): User!
+    deleteUser(id: ID!): Boolean!
+
+    # Todo Mutations
+    createTodo(input: CreateTodoInput!): Todo!
+    updateTodo(id: ID!, input: UpdateTodoInput!): Todo!
+    deleteTodo(id: ID!): Boolean!
+    completeTodo(id: ID!): Todo!
+}
+
+# Statistics Type
+type TodoStats {
+    totalTodos: Int!
+    completedTodos: Int!
+    pendingTodos: Int!
+    inProgressTodos: Int!
+    cancelledTodos: Int!
+    overdueTodos: Int!
+}
