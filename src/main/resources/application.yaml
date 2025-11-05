@@ -1,3 +1,114 @@
 spring:
   application:
     name: todo-graphql
+
+  # Database Configuration (H2 with optimizations)
+  datasource:
+    url: jdbc:h2:mem:tododb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=PostgreSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+    hikari:
+      # Connection pool settings for high availability
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      pool-name: TodoHikariPool
+
+  # JPA Configuration
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        # Enable second level cache
+        cache:
+          use_second_level_cache: true
+          use_query_cache: true
+          region:
+            factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+        # Batch processing for better performance
+        jdbc:
+          batch_size: 20
+          fetch_size: 50
+        order_inserts: true
+        order_updates: true
+    show-sql: false
+
+  # GraphQL Configuration
+  graphql:
+    graphiql:
+      enabled: true
+      path: /graphiql
+    path: /graphql
+    schema:
+      printer:
+        enabled: true
+    # Enable GraphQL Inspector for debugging
+    websocket:
+      path: /graphql
+
+  # H2 Console for development
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+  # Caching Configuration
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=1000,expireAfterWrite=600s
+    cache-names:
+      - users
+      - todos
+      - userTodos
+
+# Actuator Configuration for Health Checks and Monitoring
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    com.swiftbeard.todo_graphql: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.graphql: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+
+# Server Configuration
+server:
+  port: 8080
+  compression:
+    enabled: true
+    mime-types: application/json,application/graphql,text/html,text/xml,text/plain
+  http2:
+    enabled: true
