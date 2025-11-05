@@ -1,0 +1,714 @@
+{
+	"info": {
+		"_postman_id": "todo-graphql-collection",
+		"name": "TODO GraphQL API",
+		"description": "Comprehensive collection for testing TODO GraphQL API endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User Queries",
+			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetAllUsers {\n  users {\n    id\n    username\n    email\n    firstName\n    lastName\n    isActive\n    todoCount\n    completedTodoCount\n    pendingTodoCount\n    createdAt\n    updatedAt\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetUserById($id: ID!) {\n  user(id: $id) {\n    id\n    username\n    email\n    firstName\n    lastName\n    isActive\n    todos {\n      id\n      title\n      status\n      priority\n    }\n    todoCount\n    completedTodoCount\n    pendingTodoCount\n    createdAt\n    updatedAt\n  }\n}",
+								"variables": "{\n  \"id\": \"1\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get User by Email",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetUserByEmail($email: String!) {\n  userByEmail(email: $email) {\n    id\n    username\n    email\n    firstName\n    lastName\n    isActive\n    todoCount\n    createdAt\n  }\n}",
+								"variables": "{\n  \"email\": \"john.doe@example.com\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get User by Username",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetUserByUsername($username: String!) {\n  userByUsername(username: $username) {\n    id\n    username\n    email\n    firstName\n    lastName\n    isActive\n    todoCount\n    createdAt\n  }\n}",
+								"variables": "{\n  \"username\": \"johndoe\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Active Users",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetActiveUsers {\n  activeUsers {\n    id\n    username\n    email\n    firstName\n    lastName\n    isActive\n    todoCount\n    createdAt\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				},
+				{
+					"name": "Search Users",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query SearchUsers($search: String!) {\n  searchUsers(search: $search) {\n    id\n    username\n    email\n    firstName\n    lastName\n    isActive\n    todoCount\n    createdAt\n  }\n}",
+								"variables": "{\n  \"search\": \"john\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Todo Queries",
+			"item": [
+				{
+					"name": "Get All Todos",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetAllTodos {\n  todos {\n    id\n    title\n    description\n    status\n    priority\n    dueDate\n    completedAt\n    isOverdue\n    user {\n      id\n      username\n      email\n    }\n    createdAt\n    updatedAt\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Todo by ID",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetTodoById($id: ID!) {\n  todo(id: $id) {\n    id\n    title\n    description\n    status\n    priority\n    dueDate\n    completedAt\n    isOverdue\n    user {\n      id\n      username\n      email\n    }\n    createdAt\n    updatedAt\n  }\n}",
+								"variables": "{\n  \"id\": \"1\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Todos by User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetTodosByUser($userId: ID!) {\n  todosByUser(userId: $userId) {\n    id\n    title\n    description\n    status\n    priority\n    dueDate\n    isOverdue\n    createdAt\n  }\n}",
+								"variables": "{\n  \"userId\": \"1\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Todos by User and Status",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetTodosByUserAndStatus($userId: ID!, $status: TodoStatus!) {\n  todosByUserAndStatus(userId: $userId, status: $status) {\n    id\n    title\n    description\n    status\n    priority\n    dueDate\n    isOverdue\n    createdAt\n  }\n}",
+								"variables": "{\n  \"userId\": \"1\",\n  \"status\": \"PENDING\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Todos by User Ordered",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetTodosByUserOrdered($userId: ID!) {\n  todosByUserOrdered(userId: $userId) {\n    id\n    title\n    description\n    status\n    priority\n    dueDate\n    isOverdue\n    createdAt\n  }\n}",
+								"variables": "{\n  \"userId\": \"1\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Overdue Todos",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetOverdueTodos {\n  overdueTodos {\n    id\n    title\n    description\n    status\n    priority\n    dueDate\n    isOverdue\n    user {\n      id\n      username\n      email\n    }\n    createdAt\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Overdue Todos by User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetOverdueTodosByUser($userId: ID!) {\n  overdueTodosByUser(userId: $userId) {\n    id\n    title\n    description\n    status\n    priority\n    dueDate\n    isOverdue\n    createdAt\n  }\n}",
+								"variables": "{\n  \"userId\": \"1\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				},
+				{
+					"name": "Search Todos by User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query SearchTodosByUser($userId: ID!, $search: String!) {\n  searchTodosByUser(userId: $userId, search: $search) {\n    id\n    title\n    description\n    status\n    priority\n    dueDate\n    isOverdue\n    createdAt\n  }\n}",
+								"variables": "{\n  \"userId\": \"1\",\n  \"search\": \"bug\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				},
+				{
+					"name": "Get Todo Stats",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetTodoStats($userId: ID!) {\n  todoStats(userId: $userId) {\n    totalTodos\n    completedTodos\n    pendingTodos\n    inProgressTodos\n    cancelledTodos\n    overdueTodos\n  }\n}",
+								"variables": "{\n  \"userId\": \"1\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "User Mutations",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateUser($input: CreateUserInput!) {\n  createUser(input: $input) {\n    id\n    username\n    email\n    firstName\n    lastName\n    isActive\n    createdAt\n    updatedAt\n  }\n}",
+								"variables": "{\n  \"input\": {\n    \"username\": \"testuser\",\n    \"email\": \"test.user@example.com\",\n    \"firstName\": \"Test\",\n    \"lastName\": \"User\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateUser($id: ID!, $input: UpdateUserInput!) {\n  updateUser(id: $id, input: $input) {\n    id\n    username\n    email\n    firstName\n    lastName\n    isActive\n    updatedAt\n  }\n}",
+								"variables": "{\n  \"id\": \"1\",\n  \"input\": {\n    \"firstName\": \"Jonathan\",\n    \"lastName\": \"Doe\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation DeleteUser($id: ID!) {\n  deleteUser(id: $id)\n}",
+								"variables": "{\n  \"id\": \"5\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Todo Mutations",
+			"item": [
+				{
+					"name": "Create Todo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CreateTodo($input: CreateTodoInput!) {\n  createTodo(input: $input) {\n    id\n    title\n    description\n    status\n    priority\n    dueDate\n    user {\n      id\n      username\n    }\n    createdAt\n    updatedAt\n  }\n}",
+								"variables": "{\n  \"input\": {\n    \"title\": \"New test todo\",\n    \"description\": \"This is a test todo created via Postman\",\n    \"userId\": \"1\",\n    \"status\": \"PENDING\",\n    \"priority\": \"HIGH\",\n    \"dueDate\": \"2025-11-10T10:00:00\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				},
+				{
+					"name": "Update Todo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation UpdateTodo($id: ID!, $input: UpdateTodoInput!) {\n  updateTodo(id: $id, input: $input) {\n    id\n    title\n    description\n    status\n    priority\n    dueDate\n    updatedAt\n  }\n}",
+								"variables": "{\n  \"id\": \"1\",\n  \"input\": {\n    \"status\": \"IN_PROGRESS\",\n    \"priority\": \"URGENT\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				},
+				{
+					"name": "Complete Todo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation CompleteTodo($id: ID!) {\n  completeTodo(id: $id) {\n    id\n    title\n    status\n    completedAt\n    updatedAt\n  }\n}",
+								"variables": "{\n  \"id\": \"2\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				},
+				{
+					"name": "Delete Todo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation DeleteTodo($id: ID!) {\n  deleteTodo(id: $id)\n}",
+								"variables": "{\n  \"id\": \"10\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "Complex Queries",
+			"item": [
+				{
+					"name": "User with Todos and Stats",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetUserWithTodosAndStats($userId: ID!) {\n  user(id: $userId) {\n    id\n    username\n    email\n    firstName\n    lastName\n    todos {\n      id\n      title\n      status\n      priority\n      dueDate\n      isOverdue\n    }\n    todoCount\n    completedTodoCount\n    pendingTodoCount\n  }\n  todoStats(userId: $userId) {\n    totalTodos\n    completedTodos\n    pendingTodos\n    inProgressTodos\n    cancelledTodos\n    overdueTodos\n  }\n}",
+								"variables": "{\n  \"userId\": \"1\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				},
+				{
+					"name": "Multiple Users with Todos",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query GetMultipleUsersWithTodos {\n  users {\n    id\n    username\n    email\n    todos {\n      id\n      title\n      status\n      priority\n    }\n    todoCount\n    completedTodoCount\n    pendingTodoCount\n  }\n}",
+								"variables": ""
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/graphql",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"graphql"
+							]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8080",
+			"type": "string"
+		}
+	]
+}

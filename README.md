@@ -47,38 +47,116 @@ A comprehensive, production-ready GraphQL API for managing users and todos with 
 - **Spring Boot 3.5.7**
 - **Spring GraphQL**
 - **Spring Data JPA**
-- **H2 Database** (in-memory for development)
+- **PostgreSQL** (production-ready database via Docker)
+- **H2 Database** (in-memory for quick testing)
 - **Caffeine Cache**
 - **GraphQL Java DataLoader**
 - **Lombok**
 - **Micrometer** (Prometheus metrics)
 - **Spring Boot Actuator**
+- **Docker & Docker Compose**
 
 ## Getting Started
 
 ### Prerequisites
 - Java 17 or higher
 - Gradle
+- Docker and Docker Compose (for PostgreSQL)
 
-### Build and Run
+### Running with Docker (PostgreSQL)
+
+This is the recommended setup for local development and testing with seed data.
+
+```bash
+# Start PostgreSQL database using Docker Compose
+docker-compose up -d
+
+# Wait for PostgreSQL to be ready (about 10 seconds)
+# You can check the status with:
+docker-compose ps
+
+# Run the application with dev profile (includes seed data)
+./gradlew bootRun --args='--spring.profiles.active=dev'
+```
+
+The Docker Compose setup includes:
+- **PostgreSQL**: Running on port 5432
+- **pgAdmin**: Web interface for database management on `http://localhost:5050`
+  - Email: `admin@todo.com`
+  - Password: `admin`
+
+### Running with H2 (In-Memory)
+
+For quick testing without Docker:
 
 ```bash
 # Build the project
 ./gradlew build
 
-# Run the application
+# Run the application (uses H2 in-memory database)
 ./gradlew bootRun
 ```
 
-The application will start on `http://localhost:8080`
+### Seed Data
+
+When running with the `dev` or `test` profile, the application automatically loads seed data:
+
+**Users** (5 users):
+- johndoe (john.doe@example.com)
+- janesmith (jane.smith@example.com)
+- bobwilson (bob.wilson@example.com)
+- alicejones (alice.jones@example.com)
+- charliebrown (charlie.brown@example.com) - inactive user
+
+**Todos** (17 todos with various statuses, priorities, and due dates)
 
 ### Access Points
 
 - **GraphQL Endpoint**: `http://localhost:8080/graphql`
 - **GraphiQL UI**: `http://localhost:8080/graphiql`
-- **H2 Console**: `http://localhost:8080/h2-console`
 - **Health Check**: `http://localhost:8080/actuator/health`
 - **Prometheus Metrics**: `http://localhost:8080/actuator/prometheus`
+
+**With PostgreSQL:**
+- **pgAdmin**: `http://localhost:5050` (admin@todo.com / admin)
+
+**With H2:**
+- **H2 Console**: `http://localhost:8080/h2-console`
+
+### Testing with Postman
+
+A comprehensive Postman collection is available in the `postman/` directory:
+
+1. **Import the collection**:
+   - Open Postman
+   - Click "Import"
+   - Select `postman/TODO-GraphQL-API.postman_collection.json`
+
+2. **Import the environment** (optional):
+   - Import `postman/TODO-GraphQL-Environment.postman_environment.json`
+   - Select "TODO GraphQL Environment" from the environment dropdown
+
+3. **Start testing**:
+   - All queries and mutations are organized by category
+   - Each request includes example variables
+   - Test with seeded data (User IDs 1-5, Todo IDs 1-17)
+
+**Collection includes**:
+- User Queries (6 requests)
+- Todo Queries (9 requests)
+- User Mutations (3 requests)
+- Todo Mutations (4 requests)
+- Complex Queries (2 requests)
+
+### Stopping the Services
+
+```bash
+# Stop and remove Docker containers
+docker-compose down
+
+# Stop and remove containers with volumes (clears database data)
+docker-compose down -v
+```
 
 ## GraphQL Schema
 
@@ -380,29 +458,49 @@ Run tests with:
 
 For production deployment:
 
-1. **Replace H2 with Production Database**:
-   - PostgreSQL, MySQL, or other RDBMS
-   - Update `application.yaml` with production database settings
+1. **Database Configuration**:
+   - PostgreSQL is already configured (see `application-dev.yaml`)
+   - Update database credentials using environment variables:
+     ```yaml
+     spring.datasource.url=${DB_URL}
+     spring.datasource.username=${DB_USERNAME}
+     spring.datasource.password=${DB_PASSWORD}
+     ```
+   - Change `ddl-auto` from `create-drop` to `validate` or `none`
+   - Use database migration tools (Flyway or Liquibase)
 
 2. **Security**:
    - Add authentication/authorization (Spring Security + JWT)
    - Enable HTTPS
    - Configure CORS policies
+   - Secure database credentials
+   - Update pgAdmin access (change default credentials)
 
 3. **Configuration**:
-   - Externalize configuration
-   - Use environment-specific profiles
-   - Secure sensitive data
+   - Externalize configuration using environment variables
+   - Use production profile: `--spring.profiles.active=prod`
+   - Secure sensitive data with secret management tools
+   - Disable seed data in production (only runs on dev/test profiles)
 
 4. **Monitoring**:
    - Integrate with Prometheus + Grafana
-   - Set up alerting
-   - Configure centralized logging
+   - Set up alerting for database connections, API latency
+   - Configure centralized logging (ELK stack or similar)
+   - Monitor database performance via pgAdmin or other tools
 
 5. **Scaling**:
    - Use distributed caching (Redis)
    - Configure multiple instances with load balancing
-   - Consider read replicas for database
+   - Consider read replicas for PostgreSQL
+   - Use connection pooling (already configured with HikariCP)
+   - Implement database sharding for large datasets
+
+6. **Docker Deployment**:
+   - Use production-grade PostgreSQL configuration
+   - Set resource limits in docker-compose
+   - Use Docker secrets for sensitive data
+   - Configure automated backups for PostgreSQL
+   - Consider managed database services (AWS RDS, Azure Database, etc.)
 
 ## License
 
