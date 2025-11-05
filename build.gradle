@@ -34,6 +34,7 @@ dependencies {
 
 	// Database
 	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'org.postgresql:postgresql'
 
 	// Lombok for reducing boilerplate
 	compileOnly 'org.projectlombok:lombok:1.18.30'
